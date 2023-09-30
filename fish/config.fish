@@ -262,6 +262,7 @@ alias ncmpcpp='ncmpcpp ncmpcpp_directory=$HOME/.config/ncmpcpp/'
 alias mocp='mocp -M "$XDG_CONFIG_HOME"/moc -O MOCDir="$XDG_CONFIG_HOME"/moc'
 
 # git
+alias gstatus='git status'
 alias addup='git add -u'
 alias addall='git add .'
 alias branch='git branch'
