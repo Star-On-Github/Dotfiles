@@ -1,0 +1,76 @@
+2023-11-12 00:40:00	which rofi
+2023-11-12 00:40:05	#!/bin/bash
+
+# Define the path to the clipboard history file
+history_file="$HOME/.config/i3/clipboard_history.txt"
+
+# Define the maximum number of entries to keep in the history
+max_entries=50
+
+# Check if the history file exists, otherwise create it
+if [ ! -f $history_file ]; then
+touch $history_file
+fi
+
+# Read the clipboard content and append it to the history file
+clipboard_content=$(xclip -selection clipboard -o 2>/dev/null)
+clipboard_content=$(echo "$clipboard_content" | awk '{$1=$1};1') # Trim leading/trailing whitespace
+
+if [ -n "$clipboard_content" ]; then
+# Remove older entries if the history exceeds the maximum number of entries
+if [ $(wc -l < $history_file) -ge $max_entries ]; then
+sed -i '1d' $history_file
+fi
+
+echo -e "$(date +'%Y-%m-%d %H:%M:%S')	$clipboard_content" >> $history_file
+fi
+
+# Display the clipboard history using rofi
+selected_entry=$(cat $history_file | awk -F'	' '{print $2}' | rofi -dmenu -lines 10 -i)
+echo -n "$selected_entry" | xclip -selection clipboard
+2023-11-12 00:57:19	nitrogen was already installed and it works, now, how do i make it take screenshots whenever i press win=PrtScr?
+2023-11-17 13:20:38	bindsym $mod+Shift+Print exec spectacle -b -f -o 'xclip -selection clipboard -t image/png -i $f'
+2023-11-17 13:44:29	# i3status configuration file.
+# see "man i3status" for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+        colors = true
+        interval = 5
+}
+
+order += "disk /"
+order += "battery all"
+order += "load"
+order += "volume master"
+order += "tztime local"
+
+
+volume master {
+    format = "♪: %volume"
+    format_muted = "♪: muted (%volume)"
+    device = "default"
+    mixer = "Master"
+    mixer_idx = 0
+}
+
+battery all {
+    format = "%status %percentage %remaining"
+    last_full_capacity = true
+}
+
+tztime local {
+        format = "%Y-%m-%d %I:%M:%S"
+}
+
+load {
+        format = "%1min"
+}
+
+disk "/" {
+        format = "%avail"
+}

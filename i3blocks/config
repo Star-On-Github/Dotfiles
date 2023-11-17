@@ -1,0 +1,45 @@
+# Global properties
+separator=true
+separator_block_width=15
+
+[date]
+command=date '+%Y-%m-%d'
+interval=1
+
+[time]
+command=~/.config/i3blocks/time.sh
+interval=1
+
+[language]
+command=~/.config/i3blocks/language.sh
+signal=10
+interval=1
+
+
+[general]
+interval=5
+
+# System tray
+[tray]
+command=/usr/libexec/i3blocks/iblock-tray
+
+# Disk space
+[disk]
+command=df -h / | awk 'NR==2 {print $4}'
+interval=60
+
+# Battery
+[battery]
+command=acpi -b | awk -F'[,:%]' '{print $2, $3}' && echo "B"
+interval=60
+
+# CPU load
+[load]
+command = cat /proc/loadavg | awk '{print $1}'
+interval=5
+
+# Volume
+[volume]
+command=echo"♪"
+command=pamixer --get-volume-human
+interval=1
